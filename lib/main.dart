@@ -3,6 +3,7 @@ import 'screens/splash_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/food_list_screen.dart';
 import 'screens/budget_screen.dart';
+import 'screens/add_food_screen.dart';
 
 void main() {
   runApp(const CampusFoodFinderApp());
@@ -25,6 +26,7 @@ class CampusFoodFinderApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(),
         '/foods': (context) => const FoodListScreen(),
         '/budget': (context) => const BudgetScreen(),
+        '/add_food': (context) => const AddFoodScreen(),
       },
     );
   }
