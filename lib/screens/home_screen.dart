@@ -15,27 +15,47 @@ class HomeScreen extends StatelessWidget {
           children: [
 
             ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/foods');
-              },
-              child: const Text("Find Food Spots"),
-            ),
+  onPressed: () {
+    Navigator.pushNamed(context, '/foods');
+  },
+  child: const Text("Find Food Spots"),
+),
 
-            const SizedBox(height: 16),
+const SizedBox(height: 16),
 
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/budget');
-              },
-              child: const Text("Budget Tracker"),
-            ),
+ElevatedButton(
+  onPressed: () {
+    Navigator.pushNamed(context, '/budget');
+  },
+  child: const Text("Budget Tracker"),
+),
 
-            const SizedBox(height: 16),
+const SizedBox(height: 16),
 
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text("Favorites"),
-            ),
+ElevatedButton(
+  onPressed: () {
+    Navigator.pushNamed(context, '/favorites');
+  },
+  child: const Text("Favorites"),
+),
+
+const SizedBox(height: 16),
+
+ElevatedButton(
+  onPressed: () {
+    Navigator.pushNamed(context, '/recommend');
+  },
+  child: const Text("Food Recommendation"),
+),
+
+const SizedBox(height: 16),
+
+ElevatedButton(
+  onPressed: () {
+    Navigator.pushNamed(context, '/analytics');
+  },
+  child: const Text("Spending Analytics"),
+),
 
           ],
         ),
