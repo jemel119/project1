@@ -23,29 +23,19 @@ class HomeScreen extends StatelessWidget {
 
 const SizedBox(height: 16),
 
-ElevatedButton(
+ElevatedButton.icon(
   onPressed: () {
     Navigator.pushNamed(context, '/budget');
   },
-  child: const Text("Budget Tracker"),
+  icon: const Icon(Icons.account_balance_wallet),
+  label: const Text("Food Budget"),
 ),
 
 const SizedBox(height: 16),
 
 ElevatedButton(
-  onPressed: () {
-    Navigator.pushNamed(context, '/favorites');
-  },
+  onPressed: () {},
   child: const Text("Favorites"),
-),
-
-const SizedBox(height: 16),
-
-ElevatedButton(
-  onPressed: () {
-    Navigator.pushNamed(context, '/recommend');
-  },
-  child: const Text("Food Recommendation"),
 ),
 
 const SizedBox(height: 16),
