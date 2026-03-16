@@ -67,18 +67,10 @@ class _FoodListScreenState extends State<FoodListScreen> {
             ),
 
       floatingActionButton: FloatingActionButton(
-  onPressed: () async {
-
-    await DatabaseHelper.instance.createRestaurant({
-      'name': 'Campus Pizza',
-      'cuisine': 'Italian',
-      'price_range': '\$',
-      'open_hours': '10AM - 10PM',
-      'notes': 'Popular student spot'
+  onPressed: () {
+    Navigator.pushNamed(context, '/add_food').then((_) {
+      loadRestaurants();
     });
-
-    loadRestaurants();
-
   },
   child: const Icon(Icons.add),
 ),
