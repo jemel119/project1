@@ -6,6 +6,7 @@ import 'screens/budget_screen.dart';
 import 'screens/add_food_screen.dart';
 import 'screens/expense_list_screen.dart';
 import 'screens/add_expense_acreen.dart';
+import 'screens/recommendation_screen.dart';
 
 void main() {
   runApp(const CampusFoodFinderApp());
@@ -31,6 +32,7 @@ class CampusFoodFinderApp extends StatelessWidget {
         '/add_food': (context) => const AddFoodScreen(),
         '/expenses': (context) => const ExpenseListScreen(),
         '/add_expense': (context) => const AddExpenseScreen(),
+        '/recommend': (context) => const RecommendationScreen(),
       },
     );
   }
