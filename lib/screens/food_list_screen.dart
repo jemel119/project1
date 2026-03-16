@@ -57,10 +57,10 @@ class _FoodListScreenState extends State<FoodListScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await Navigator.pushNamed(context, '/add_food');
-          loadRestaurants();
-        },
-        child: const Icon(Icons.add),
-      ),
+          loadRestaurants();   // refresh list after returning
+      },
+          child: const Icon(Icons.add),
+    ),
 
       body: Column(
 

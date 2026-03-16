@@ -14,7 +14,15 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
   final cuisineController = TextEditingController();
   final priceController = TextEditingController();
 
-  Future saveRestaurant() async {
+  Future<void> saveRestaurant() async {
+
+    // Prevent saving empty restaurants
+    if (nameController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Restaurant name is required")),
+      );
+      return;
+    }
 
     final restaurant = {
       'name': nameController.text,
@@ -26,6 +34,8 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
     };
 
     await DatabaseHelper.instance.createRestaurant(restaurant);
+
+    if (!mounted) return;
 
     Navigator.pop(context);
   }
@@ -63,7 +73,9 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
             const SizedBox(height: 20),
 
             ElevatedButton(
-              onPressed: saveRestaurant,
+              onPressed: () async {
+                await saveRestaurant();
+              },
               child: const Text("Save"),
             )
 
