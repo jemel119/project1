@@ -62,7 +62,19 @@ class _FoodListScreenState extends State<FoodListScreen> {
                   name: restaurant['name'],
                   cuisine: restaurant['cuisine'] ?? "",
                   priceRange: restaurant['price_range'] ?? "",
-                  onTap: () {},
+                  onTap: () {
+
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) =>
+          FoodDetailScreen(restaurantId: restaurant['id']),
+    ),
+  ).then((_) {
+    loadRestaurants();
+  });
+
+},
                 );
               },
             ),
