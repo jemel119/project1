@@ -172,4 +172,15 @@ class DatabaseHelper {
     final db = await instance.database;
     db.close();
   }
+
+  Future<double> getTotalSpending() async {
+  final db = await instance.database;
+
+  final result =
+      await db.rawQuery("SELECT SUM(amount) as total FROM expenses");
+
+  double total = (result.first['total'] as num?)?.toDouble() ?? 0.0;
+
+  return total;
+}
 }
