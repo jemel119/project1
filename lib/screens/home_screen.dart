@@ -53,7 +53,15 @@ ElevatedButton.icon(
   },
   icon: const Icon(Icons.attach_money),
   label: const Text("Track Food Budget"),
-)
+),
+
+ElevatedButton.icon(
+  onPressed: () {
+    Navigator.pushNamed(context, '/recommend');
+  },
+  icon: const Icon(Icons.smart_toy),
+  label: const Text("Food Recommendation"),
+),
 
           ],
         ),
