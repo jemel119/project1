@@ -47,6 +47,14 @@ ElevatedButton(
   child: const Text("Spending Analytics"),
 ),
 
+ElevatedButton.icon(
+  onPressed: () {
+    Navigator.pushNamed(context, '/expenses');
+  },
+  icon: const Icon(Icons.attach_money),
+  label: const Text("Track Food Budget"),
+)
+
           ],
         ),
       ),
