@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import '../database/database_helper.dart';
-import '../widgets/restaurant_card.dart';
-import 'food_detail_screen.dart';
 
 class FoodListScreen extends StatefulWidget {
   const FoodListScreen({super.key});
@@ -13,13 +11,9 @@ class FoodListScreen extends StatefulWidget {
 class _FoodListScreenState extends State<FoodListScreen> {
 
   List<Map<String, dynamic>> restaurants = [];
-  bool isLoading = true;
+  List<Map<String, dynamic>> filtered = [];
 
-  @override
-  void initState() {
-    super.initState();
-    loadRestaurants();
-  }
+  final searchController = TextEditingController();
 
   Future loadRestaurants() async {
 
@@ -27,66 +21,86 @@ class _FoodListScreenState extends State<FoodListScreen> {
 
     setState(() {
       restaurants = data;
-      isLoading = false;
+      filtered = data;
     });
+  }
+
+  void search(String text) {
+
+    setState(() {
+
+      filtered = restaurants.where((r) {
+
+        final name = r['name'].toLowerCase();
+
+        return name.contains(text.toLowerCase());
+
+      }).toList();
+
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadRestaurants();
   }
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
-
       appBar: AppBar(
         title: const Text("Food Spots"),
       ),
 
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await Navigator.pushNamed(context, '/add_food');
+          loadRestaurants();
+        },
+        child: const Icon(Icons.add),
+      ),
 
-          : restaurants.isEmpty
-          ? const Center(
-              child: Text(
-                "No food spots added yet.\nTap + to add one.",
-                textAlign: TextAlign.center,
+      body: Column(
+
+        children: [
+
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: TextField(
+              controller: searchController,
+              decoration: const InputDecoration(
+                labelText: "Search restaurants",
+                prefixIcon: Icon(Icons.search),
               ),
-            )
+              onChanged: search,
+            ),
+          ),
 
-          : ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: restaurants.length,
+          Expanded(
+            child: ListView.builder(
+              itemCount: filtered.length,
               itemBuilder: (context, index) {
 
-                final restaurant = restaurants[index];
+                final r = filtered[index];
 
-                return RestaurantCard(
-                  name: restaurant['name'],
-                  cuisine: restaurant['cuisine'] ?? "",
-                  priceRange: restaurant['price_range'] ?? "",
-                  onTap: () {
-
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) =>
-          FoodDetailScreen(restaurantId: restaurant['id']),
-    ),
-  ).then((_) {
-    loadRestaurants();
-  });
-
-},
+                return ListTile(
+                  title: Text(r['name']),
+                  subtitle: Text(r['cuisine'] ?? ""),
+                  trailing: Icon(
+                    r['is_favorite'] == 1
+                        ? Icons.favorite
+                        : Icons.favorite_border,
+                    color: Colors.red,
+                  ),
                 );
               },
             ),
+          )
 
-      floatingActionButton: FloatingActionButton(
-  onPressed: () {
-    Navigator.pushNamed(context, '/add_food').then((_) {
-      loadRestaurants();
-    });
-  },
-  child: const Icon(Icons.add),
-),
+        ],
+      ),
     );
   }
 }

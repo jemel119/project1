@@ -3,6 +3,7 @@ import '../database/database_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BudgetScreen extends StatefulWidget {
+
   const BudgetScreen({super.key});
 
   @override
@@ -14,7 +15,9 @@ class _BudgetScreenState extends State<BudgetScreen> {
   double monthlyBudget = 100;
   double totalSpent = 0;
 
-  final TextEditingController budgetController = TextEditingController();
+  List<Map<String, dynamic>> categoryStats = [];
+
+  final controller = TextEditingController();
 
   @override
   void initState() {
@@ -26,11 +29,12 @@ class _BudgetScreenState extends State<BudgetScreen> {
   Future loadBudget() async {
 
     final prefs = await SharedPreferences.getInstance();
-    double? savedBudget = prefs.getDouble('monthly_budget');
+
+    double? value = prefs.getDouble('budget');
 
     setState(() {
-      monthlyBudget = savedBudget ?? 100;
-      budgetController.text = monthlyBudget.toString();
+      monthlyBudget = value ?? 100;
+      controller.text = monthlyBudget.toString();
     });
   }
 
@@ -38,9 +42,9 @@ class _BudgetScreenState extends State<BudgetScreen> {
 
     final prefs = await SharedPreferences.getInstance();
 
-    double value = double.parse(budgetController.text);
+    double value = double.parse(controller.text);
 
-    await prefs.setDouble('monthly_budget', value);
+    await prefs.setDouble('budget', value);
 
     setState(() {
       monthlyBudget = value;
@@ -51,8 +55,12 @@ class _BudgetScreenState extends State<BudgetScreen> {
 
     final total = await DatabaseHelper.instance.getTotalSpending();
 
+    final categories =
+        await DatabaseHelper.instance.getSpendingByCategory();
+
     setState(() {
       totalSpent = total;
+      categoryStats = categories;
     });
   }
 
@@ -60,7 +68,6 @@ class _BudgetScreenState extends State<BudgetScreen> {
   Widget build(BuildContext context) {
 
     double remaining = monthlyBudget - totalSpent;
-    double progress = totalSpent / monthlyBudget;
 
     return Scaffold(
 
@@ -71,81 +78,49 @@ class _BudgetScreenState extends State<BudgetScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16),
 
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
 
           children: [
 
-            const Text(
-              "Monthly Budget",
-              style: TextStyle(fontSize: 18),
-            ),
-
-            const SizedBox(height: 10),
-
             TextField(
-              controller: budgetController,
-              keyboardType: TextInputType.number,
+              controller: controller,
               decoration: const InputDecoration(
-                labelText: "Set Budget",
-                border: OutlineInputBorder(),
+                labelText: "Monthly Budget",
               ),
             ),
-
-            const SizedBox(height: 10),
 
             ElevatedButton(
               onPressed: saveBudget,
               child: const Text("Save Budget"),
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
 
-            Text(
-              "Total Spent: \$${totalSpent.toStringAsFixed(2)}",
-              style: const TextStyle(fontSize: 18),
-            ),
+            Text("Total Spent: \$${totalSpent.toStringAsFixed(2)}"),
 
-            const SizedBox(height: 10),
-
-            Text(
-              "Remaining: \$${remaining.toStringAsFixed(2)}",
-              style: TextStyle(
-                fontSize: 18,
-                color: remaining < 0 ? Colors.red : Colors.green,
-              ),
-            ),
-
-            const SizedBox(height: 30),
-
-            LinearProgressIndicator(
-              value: progress > 1 ? 1 : progress,
-              minHeight: 12,
-            ),
+            Text("Remaining: \$${remaining.toStringAsFixed(2)}"),
 
             const SizedBox(height: 20),
 
-            if (remaining < 0)
-              const Text(
-                "⚠️ You are over budget!",
-                style: TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-            const SizedBox(height: 30),
-
-            ElevatedButton.icon(
-              onPressed: () {
-                Navigator.pushNamed(context, '/expenses').then((_) {
-                  loadSpending();
-                });
-              },
-              icon: const Icon(Icons.list),
-              label: const Text("View Expenses"),
+            const Text(
+              "Spending by Category",
+              style: TextStyle(fontSize: 18),
             ),
 
+            ...categoryStats.map((c) => ListTile(
+                  title: Text(c['category'] ?? "Other"),
+                  trailing: Text("\$${c['total']}"),
+                )),
+
+            const SizedBox(height: 20),
+
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/expenses')
+                    .then((_) => loadSpending());
+              },
+              child: const Text("View Expenses"),
+            )
           ],
         ),
       ),

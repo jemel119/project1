@@ -10,36 +10,30 @@ class AddFoodScreen extends StatefulWidget {
 
 class _AddFoodScreenState extends State<AddFoodScreen> {
 
-  final _formKey = GlobalKey<FormState>();
-
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController cuisineController = TextEditingController();
-  final TextEditingController hoursController = TextEditingController();
-  final TextEditingController notesController = TextEditingController();
-
-  String priceRange = "\$";
+  final nameController = TextEditingController();
+  final cuisineController = TextEditingController();
+  final priceController = TextEditingController();
 
   Future saveRestaurant() async {
 
-    if (_formKey.currentState!.validate()) {
+    final restaurant = {
+      'name': nameController.text,
+      'cuisine': cuisineController.text,
+      'price_range': priceController.text,
+      'open_hours': '',
+      'notes': '',
+      'is_favorite': 0,
+    };
 
-      await DatabaseHelper.instance.createRestaurant({
-        'name': nameController.text,
-        'cuisine': cuisineController.text,
-        'price_range': priceRange,
-        'open_hours': hoursController.text,
-        'notes': notesController.text
-      });
+    await DatabaseHelper.instance.createRestaurant(restaurant);
 
-      Navigator.pop(context);
-    }
+    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
-
       appBar: AppBar(
         title: const Text("Add Food Spot"),
       ),
@@ -47,86 +41,33 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16),
 
-        child: Form(
-          key: _formKey,
+        child: Column(
 
-          child: ListView(
+          children: [
 
-            children: [
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(labelText: "Name"),
+            ),
 
-              TextFormField(
-                controller: nameController,
-                decoration: const InputDecoration(
-                  labelText: "Restaurant Name",
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please enter a restaurant name";
-                  }
-                  return null;
-                },
-              ),
+            TextField(
+              controller: cuisineController,
+              decoration: const InputDecoration(labelText: "Cuisine"),
+            ),
 
-              const SizedBox(height: 16),
+            TextField(
+              controller: priceController,
+              decoration: const InputDecoration(labelText: "Price Range"),
+            ),
 
-              TextFormField(
-                controller: cuisineController,
-                decoration: const InputDecoration(
-                  labelText: "Cuisine Type",
-                ),
-              ),
+            const SizedBox(height: 20),
 
-              const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: saveRestaurant,
+              child: const Text("Save"),
+            )
 
-              DropdownButtonFormField<String>(
-
-                value: priceRange,
-
-                items: const [
-                  DropdownMenuItem(value: "\$", child: Text("\$ Cheap")),
-                  DropdownMenuItem(value: "\$\$", child: Text("\$\$ Moderate")),
-                  DropdownMenuItem(value: "\$\$\$", child: Text("\$\$\$ Expensive")),
-                ],
-
-                onChanged: (value) {
-                  setState(() {
-                    priceRange = value!;
-                  });
-                },
-
-                decoration: const InputDecoration(
-                  labelText: "Price Range",
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              TextFormField(
-                controller: hoursController,
-                decoration: const InputDecoration(
-                  labelText: "Open Hours",
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              TextFormField(
-                controller: notesController,
-                decoration: const InputDecoration(
-                  labelText: "Notes",
-                ),
-                maxLines: 3,
-              ),
-
-              const SizedBox(height: 30),
-
-              ElevatedButton(
-                onPressed: saveRestaurant,
-                child: const Text("Save Restaurant"),
-              )
-
-            ],
-          ),
+          ],
         ),
       ),
     );

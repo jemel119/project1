@@ -11,7 +11,15 @@ class ExpenseListScreen extends StatefulWidget {
 class _ExpenseListScreenState extends State<ExpenseListScreen> {
 
   List<Map<String, dynamic>> expenses = [];
-  double total = 0;
+
+  Future loadExpenses() async {
+
+    final data = await DatabaseHelper.instance.getExpenses();
+
+    setState(() {
+      expenses = data;
+    });
+  }
 
   @override
   void initState() {
@@ -19,65 +27,34 @@ class _ExpenseListScreenState extends State<ExpenseListScreen> {
     loadExpenses();
   }
 
-  Future loadExpenses() async {
-
-    final data = await DatabaseHelper.instance.getExpenses();
-    final totalAmount = await DatabaseHelper.instance.getTotalSpending();
-
-    setState(() {
-      expenses = data;
-      total = totalAmount;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
-
       appBar: AppBar(
-        title: const Text("Food Budget Tracker"),
-      ),
-
-      body: Column(
-        children: [
-
-          Container(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              "Total Spent: \$${total.toStringAsFixed(2)}",
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-
-          Expanded(
-            child: ListView.builder(
-              itemCount: expenses.length,
-              itemBuilder: (context, index) {
-
-                final expense = expenses[index];
-
-                return ListTile(
-                  title: Text(expense['title']),
-                  subtitle: Text(expense['category']),
-                  trailing: Text("\$${expense['amount']}"),
-                );
-              },
-            ),
-          ),
-        ],
+        title: const Text("Expenses"),
       ),
 
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, '/add_expense').then((_) {
-            loadExpenses();
-          });
+        onPressed: () async {
+          await Navigator.pushNamed(context, '/add_expense');
+          loadExpenses();
         },
         child: const Icon(Icons.add),
+      ),
+
+      body: ListView.builder(
+        itemCount: expenses.length,
+        itemBuilder: (context, index) {
+
+          final e = expenses[index];
+
+          return ListTile(
+            title: Text(e['title']),
+            subtitle: Text(e['date']),
+            trailing: Text("\$${e['amount']}"),
+          );
+        },
       ),
     );
   }
