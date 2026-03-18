@@ -1,59 +1,59 @@
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
-
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
+      appBar: AppBar(title: const Text("Campus Food Finder")),
 
-      appBar: AppBar(
-        title: const Text("Campus Food Finder"),
-      ),
-
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(20),
 
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
 
           children: [
 
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/foods');
-              },
-              child: const Text("Find Food Spots"),
+            const SizedBox(height: 30),
+
+            const Text(
+              "Welcome!",
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+
+            const SizedBox(height: 30),
+
+            ElevatedButton.icon(
+              onPressed: () => Navigator.pushNamed(context, '/foods'),
+              icon: const Icon(Icons.restaurant),
+              label: const Text("Find Food Spots"),
             ),
 
             const SizedBox(height: 16),
 
             ElevatedButton.icon(
-              onPressed: () {
-                Navigator.pushNamed(context, '/budget');
-              },
+              onPressed: () => Navigator.pushNamed(context, '/budget'),
               icon: const Icon(Icons.account_balance_wallet),
               label: const Text("Food Budget"),
             ),
 
             const SizedBox(height: 16),
 
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/favorites');
-              },
-              child: const Text("Favorites"),
+            ElevatedButton.icon(
+              onPressed: () => Navigator.pushNamed(context, '/favorites'),
+              icon: const Icon(Icons.favorite),
+              label: const Text("Favorites"),
             ),
+
+            const SizedBox(height: 16),
 
             ElevatedButton.icon(
-              onPressed: () {
-                Navigator.pushNamed(context, '/recommend');
-              },
-                icon: const Icon(Icons.restaurant),
-                label: const Text("Smart Recommendation"),
+              onPressed: () => Navigator.pushNamed(context, '/recommend'),
+              icon: const Icon(Icons.lightbulb),
+              label: const Text("Smart Recommendation"),
             ),
-
           ],
         ),
       ),

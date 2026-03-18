@@ -1,14 +1,13 @@
+import 'package:campus_food_finder/screens/recommend_screen.dart';
 import 'package:flutter/material.dart';
-
 import 'screens/splash_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/food_list_screen.dart';
 import 'screens/add_food_screen.dart';
-import 'screens/food_detail_screen.dart';
-import 'screens/favorites_screen.dart';
+import 'screens/budget_screen.dart';
 import 'screens/expense_list_screen.dart';
 import 'screens/add_expense_screen.dart';
-import 'screens/budget_screen.dart';
+import 'screens/favorites_screen.dart';
 import 'screens/recommend_screen.dart';
 
 void main() {
@@ -21,11 +20,17 @@ class CampusFoodApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Campus Food Finder",
-      debugShowCheckedModeBanner: false,
+      title: 'Campus Food Finder',
 
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        primaryColor: Colors.green,
+        scaffoldBackgroundColor: Colors.grey[100],
+
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.green,
+          foregroundColor: Colors.white,
+          centerTitle: true,
+        ),
       ),
 
       initialRoute: '/',
@@ -35,12 +40,11 @@ class CampusFoodApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(),
         '/foods': (context) => const FoodListScreen(),
         '/add_food': (context) => const AddFoodScreen(),
-        '/favorites': (context) => const FavoritesScreen(),
+        '/budget': (context) => const BudgetScreen(),
         '/expenses': (context) => const ExpenseListScreen(),
         '/add_expense': (context) => const AddExpenseScreen(),
-        '/budget': (context) => const BudgetScreen(),
-        '/food_detail': (context) => const FoodDetailScreen(),
-        '/recommend': (context) => const RecommendScreen(),
+        '/favorites': (context) => const FavoritesScreen(),
+        '/recommend': (context) => const RecommendationScreen(),
       },
     );
   }

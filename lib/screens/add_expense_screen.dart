@@ -16,14 +16,16 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
   Future saveExpense() async {
 
-    final expense = {
-      'title': titleController.text,
-      'amount': double.parse(amountController.text),
-      'category': categoryController.text,
-      'date': DateTime.now().toString(),
-    };
+    double? amount = double.tryParse(amountController.text);
 
-    await DatabaseHelper.instance.createExpense(expense);
+    if (titleController.text.isEmpty || amount == null) return;
+
+    await DatabaseHelper.instance.createExpense({
+      'title': titleController.text,
+      'amount': amount,
+      'category': categoryController.text.isEmpty ? "Other" : categoryController.text,
+      'date': DateTime.now().toString(),
+    });
 
     Navigator.pop(context);
   }
@@ -32,40 +34,27 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Add Expense"),
-      ),
+      appBar: AppBar(title: const Text("Add Expense")),
 
       body: Padding(
         padding: const EdgeInsets.all(16),
 
         child: Column(
-
           children: [
 
-            TextField(
-              controller: titleController,
-              decoration: const InputDecoration(labelText: "Title"),
-            ),
+            TextField(controller: titleController, decoration: const InputDecoration(labelText: "Title")),
 
             TextField(
               controller: amountController,
-              decoration: const InputDecoration(labelText: "Amount"),
               keyboardType: TextInputType.number,
+              decoration: const InputDecoration(labelText: "Amount"),
             ),
 
-            TextField(
-              controller: categoryController,
-              decoration: const InputDecoration(labelText: "Category"),
-            ),
+            TextField(controller: categoryController, decoration: const InputDecoration(labelText: "Category")),
 
             const SizedBox(height: 20),
 
-            ElevatedButton(
-              onPressed: saveExpense,
-              child: const Text("Save"),
-            )
-
+            ElevatedButton(onPressed: saveExpense, child: const Text("Save")),
           ],
         ),
       ),

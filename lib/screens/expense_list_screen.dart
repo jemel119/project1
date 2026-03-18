@@ -13,12 +13,8 @@ class _ExpenseListScreenState extends State<ExpenseListScreen> {
   List<Map<String, dynamic>> expenses = [];
 
   Future loadExpenses() async {
-
     final data = await DatabaseHelper.instance.getExpenses();
-
-    setState(() {
-      expenses = data;
-    });
+    setState(() => expenses = data);
   }
 
   @override
@@ -31,9 +27,7 @@ class _ExpenseListScreenState extends State<ExpenseListScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Expenses"),
-      ),
+      appBar: AppBar(title: const Text("Expenses")),
 
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
@@ -43,19 +37,25 @@ class _ExpenseListScreenState extends State<ExpenseListScreen> {
         child: const Icon(Icons.add),
       ),
 
-      body: ListView.builder(
-        itemCount: expenses.length,
-        itemBuilder: (context, index) {
+      body: expenses.isEmpty
+          ? const Center(child: Text("No expenses yet"))
+          : ListView.builder(
+              itemCount: expenses.length,
+              itemBuilder: (context, i) {
 
-          final e = expenses[index];
+                final e = expenses[i];
 
-          return ListTile(
-            title: Text(e['title']),
-            subtitle: Text(e['date']),
-            trailing: Text("\$${e['amount']}"),
-          );
-        },
-      ),
+                return Card(
+                  child: ListTile(
+                    title: Text(e['title']),
+                    subtitle: Text(e['category']),
+                    trailing: Text(
+                      "\$${(e['amount'] as num).toStringAsFixed(2)}",
+                    ),
+                  ),
+                );
+              },
+            ),
     );
   }
 }

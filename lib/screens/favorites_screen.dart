@@ -13,12 +13,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   List<Map<String, dynamic>> favorites = [];
 
   Future loadFavorites() async {
-
-    final all = await DatabaseHelper.instance.getRestaurants();
-
-    setState(() {
-      favorites = all.where((r) => r['is_favorite'] == 1).toList();
-    });
+    final data = await DatabaseHelper.instance.getFavorites();
+    setState(() => favorites = data);
   }
 
   @override
@@ -31,22 +27,24 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Favorites"),
-      ),
+      appBar: AppBar(title: const Text("Favorites")),
 
-      body: ListView.builder(
-        itemCount: favorites.length,
-        itemBuilder: (context, index) {
+      body: favorites.isEmpty
+          ? const Center(child: Text("No favorites yet"))
+          : ListView.builder(
+              itemCount: favorites.length,
+              itemBuilder: (context, i) {
 
-          final r = favorites[index];
+                final r = favorites[i];
 
-          return ListTile(
-            title: Text(r['name']),
-            subtitle: Text(r['cuisine']),
-          );
-        },
-      ),
+                return Card(
+                  child: ListTile(
+                    title: Text(r['name']),
+                    subtitle: Text(r['cuisine']),
+                  ),
+                );
+              },
+            ),
     );
   }
 }
