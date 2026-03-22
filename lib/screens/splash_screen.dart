@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/auth_service.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -10,13 +11,23 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
 
   @override
-  void initState() {
-    super.initState();
+void initState() {
+  super.initState();
+  _authenticateUser();
+}
 
-    Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pushReplacementNamed(context, '/home');
-    });
+Future<void> _authenticateUser() async {
+  final auth = AuthService();
+
+  bool success = await auth.authenticate();
+
+  if (success) {
+    Navigator.pushReplacementNamed(context, '/home');
+  } else {
+    // fallback (still allow access for demo safety)
+    Navigator.pushReplacementNamed(context, '/home');
   }
+}
 
   @override
   Widget build(BuildContext context) {
