@@ -54,6 +54,12 @@ class HomeScreen extends StatelessWidget {
               icon: const Icon(Icons.lightbulb),
               label: const Text("Smart Recommendation"),
             ),
+
+            ElevatedButton.icon(
+              onPressed: () => Navigator.pushNamed(context, '/settings'),
+              icon: const Icon(Icons.settings),
+              label: const Text("Settings"),
+            ),
           ],
         ),
       ),
