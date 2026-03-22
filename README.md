@@ -34,20 +34,20 @@ Jeremy Henry – UI, Database, Testing, Documentation
 - View recommendations based on favorites
 - Monitor spending categories
 
-## Database Schema
+##  Database Schema
 Tables:
 - restaurants(id, name, cuisine, price_range, is_favorite)
 - expenses(id, title, amount, category, date)
 
-## Known Issues
+##  Known Issues
 - No cloud sync (offline only)
 - Basic UI styling
 
-## Future Improvements
+##  Future Improvements
 - Search/filter
 - Notifications
 - Better AI recommendations
 - Dark mode
 
-## License
+##  License
 MIT
