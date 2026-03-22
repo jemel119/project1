@@ -13,6 +13,9 @@ class _FoodListScreenState extends State<FoodListScreen> {
 
   List<Map<String, dynamic>> restaurants = [];
 
+  final searchController = TextEditingController();
+  String selectedCuisine = "All";
+
   Future loadRestaurants() async {
     final data = await DatabaseHelper.instance.getRestaurants();
     setState(() => restaurants = data);
@@ -24,8 +27,26 @@ class _FoodListScreenState extends State<FoodListScreen> {
     loadRestaurants();
   }
 
+  // 🔍 FILTER LOGIC
+  List<Map<String, dynamic>> filteredRestaurants() {
+    return restaurants.where((r) {
+      final name = (r['name'] ?? "").toLowerCase();
+      final cuisine = (r['cuisine'] ?? "");
+
+      final matchesSearch =
+          name.contains(searchController.text.toLowerCase());
+
+      final matchesCuisine =
+          selectedCuisine == "All" || cuisine == selectedCuisine;
+
+      return matchesSearch && matchesCuisine;
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
+
+    final filtered = filteredRestaurants();
 
     return Scaffold(
       appBar: AppBar(title: const Text("Food Spots")),
@@ -38,40 +59,97 @@ class _FoodListScreenState extends State<FoodListScreen> {
         child: const Icon(Icons.add),
       ),
 
-      body: restaurants.isEmpty
-          ? const Center(child: Text("No restaurants yet"))
-          : ListView.builder(
-              itemCount: restaurants.length,
-              itemBuilder: (context, i) {
+      body: Padding(
+        padding: const EdgeInsets.all(12),
 
-                final r = restaurants[i];
+        child: Column(
+          children: [
 
-                return Card(
-  child: ListTile(
-    title: Text(r['name']),
-    subtitle: Text(r['cuisine'] ?? ""),
+            // 🔍 SEARCH BAR
+            TextField(
+              controller: searchController,
+              decoration: InputDecoration(
+                labelText: "Search restaurants",
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onChanged: (value) => setState(() {}),
+            ),
 
-    onTap: () async {
-      await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => FoodDetailScreen(restaurant: r),
-        ),
-      );
+            const SizedBox(height: 10),
 
-      loadRestaurants(); // refresh after returning
-    },
-
-    trailing: Icon(
-      r['is_favorite'] == 1
-          ? Icons.favorite
-          : Icons.favorite_border,
-      color: Colors.red,
-    ),
-  ),
-);
+            //  FILTER DROPDOWN
+            DropdownButtonFormField<String>(
+              initialValue: selectedCuisine,
+              decoration: InputDecoration(
+                labelText: "Filter by Cuisine",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              items: ["All", "Fast Food", "Asian", "American", "Other"]
+                  .map((c) => DropdownMenuItem(
+                        value: c,
+                        child: Text(c),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedCuisine = value!;
+                });
               },
             ),
+
+            const SizedBox(height: 10),
+
+            //  LIST
+            Expanded(
+              child: filtered.isEmpty
+                  ? const Center(child: Text("No matching restaurants"))
+                  : ListView.builder(
+                      itemCount: filtered.length,
+                      itemBuilder: (context, i) {
+
+                        final r = filtered[i];
+
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          elevation: 2,
+
+                          child: ListTile(
+                            title: Text(r['name']),
+                            subtitle: Text(r['cuisine'] ?? ""),
+
+                            onTap: () async {
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      FoodDetailScreen(restaurant: r),
+                                ),
+                              );
+
+                              loadRestaurants();
+                            },
+
+                            trailing: Icon(
+                              r['is_favorite'] == 1
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: Colors.red,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

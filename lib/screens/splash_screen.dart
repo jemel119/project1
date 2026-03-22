@@ -24,7 +24,7 @@ Future<void> _authenticateUser() async {
   if (success) {
     Navigator.pushReplacementNamed(context, '/home');
   } else {
-    // fallback (still allow access for demo safety)
+    // fallback
     Navigator.pushReplacementNamed(context, '/home');
   }
 }
