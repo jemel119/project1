@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../database/database_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../widgets/spending_chart.dart';
 
 class BudgetScreen extends StatefulWidget {
   const BudgetScreen({super.key});
@@ -121,7 +122,14 @@ class _BudgetScreenState extends State<BudgetScreen> {
 
             const SizedBox(height: 20),
 
-            const Text("Categories"),
+            const Text(
+  "Spending by Category",
+  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+),
+
+const SizedBox(height: 10),
+
+SpendingChart(data: categoryStats),
 
             ...categoryStats.map((c) => Card(
               child: ListTile(
