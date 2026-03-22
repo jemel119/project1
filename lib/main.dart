@@ -9,6 +9,7 @@ import 'screens/expense_list_screen.dart';
 import 'screens/add_expense_screen.dart';
 import 'screens/favorites_screen.dart';
 import 'screens/recommend_screen.dart';
+import 'screens/settings_screen.dart';
 
 void main() {
   runApp(const CampusFoodApp());
@@ -45,6 +46,7 @@ class CampusFoodApp extends StatelessWidget {
         '/add_expense': (context) => const AddExpenseScreen(),
         '/favorites': (context) => const FavoritesScreen(),
         '/recommend': (context) => const RecommendationScreen(),
+        '/settings': (context) => const SettingsScreen(),
       },
     );
   }
