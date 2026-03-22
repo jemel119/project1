@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:fl_chart/fl_chart.dart';
 
 class SpendingChart extends StatelessWidget {
-
   final List<Map<String, dynamic>> data;
 
   const SpendingChart({super.key, required this.data});
@@ -10,21 +9,23 @@ class SpendingChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final series = [
-      charts.Series<Map<String, dynamic>, String>(
-        id: "Spending",
-        data: data,
-        domainFn: (d, _) => d['category'] ?? "Other",
-        measureFn: (d, _) => (d['total'] as num).toDouble(),
-        labelAccessorFn: (d, _) => "\$${d['total']}",
-      )
-    ];
+    if (data.isEmpty) {
+      return const Text("No data for chart");
+    }
 
     return SizedBox(
       height: 200,
-      child: charts.BarChart(
-        series,
-        animate: true,
+      child: PieChart(
+        PieChartData(
+          sections: data.map((item) {
+            final value = (item['total'] as num).toDouble();
+
+            return PieChartSectionData(
+              value: value,
+              title: "${item['category']}\n\$${value.toStringAsFixed(0)}",
+            );
+          }).toList(),
+        ),
       ),
     );
   }
