@@ -1,17 +1,53 @@
-# campus_food_finder
+# Campus Food Finder & Budget Bites
 
-A new Flutter project.
+## Project Description
+This mobile app helps students find affordable food spots and track their food spending using local storage.
 
-## Getting Started
+## Team Members
+Jeremy Henry – UI, Database, Testing, Documentation
 
-This project is a starting point for a Flutter application.
+## Features
+- Add and view food spots
+- Favorite restaurants
+- Budget tracking
+- Expense tracking (CRUD)
+- Category-based spending analytics
+- Smart recommendation system
+- Splash screen & navigation
+- Data visualization (chart) [if added]
 
-A few resources to get you started if this is your first Flutter project:
+## Technologies
+- Flutter (latest stable)
+- Dart
+- SQLite (sqflite)
+- SharedPreferences
+- charts_flutter (if used)
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+## Installation
+1. Clone repo
+2. Run `flutter pub get`
+3. Run `flutter run`
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## How to Use
+- Add restaurants via "+" button
+- Track expenses in budget section
+- View recommendations based on favorites
+- Monitor spending categories
+
+## Database Schema
+Tables:
+- restaurants(id, name, cuisine, price_range, is_favorite)
+- expenses(id, title, amount, category, date)
+
+## Known Issues
+- No cloud sync (offline only)
+- Basic UI styling
+
+## Future Improvements
+- Search/filter
+- Notifications
+- Better AI recommendations
+- Dark mode
+
+## 📜 License
+MIT
