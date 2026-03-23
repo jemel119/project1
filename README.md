@@ -1,53 +1,74 @@
-# Campus Food Finder & Budget Bites
+# Campus Food Finder & Budget Tracker
 
 ##  Project Description
-This mobile app helps students find affordable food spots and track their food spending using local storage.
+This mobile application helps students find food spots, track expenses, and manage their food budget efficiently. The app works fully offline using SQLite and SharedPreferences.
 
-##  Team Members
-Jeremy Henry – UI, Database, Testing, Documentation
+##  Developer
+Jeremy Henry
 
 ##  Features
 - Add and view food spots
 - Favorite restaurants
-- Budget tracking
-- Expense tracking (CRUD)
+- Food detail view
+- Expense tracking system
+- Budget management
 - Category-based spending analytics
-- Smart recommendation system
-- Splash screen & navigation
-- Data visualization (chart) [if added]
+- Search and filter restaurants
+- Local recommendation system
+- Biometric authentication (fingerprint/face)
+- Dark mode support
+- Data visualization (pie chart)
 
-##  Technologies
+##  Technologies Used
 - Flutter (latest stable)
 - Dart
-- SQLite (sqflite)
-- SharedPreferences
-- charts_flutter (if used)
+- sqflite (SQLite)
+- shared_preferences
+- fl_chart
+- local_auth
 
 ##  Installation
-1. Clone repo
+1. Clone repository
 2. Run `flutter pub get`
 3. Run `flutter run`
 
-##  How to Use
-- Add restaurants via "+" button
-- Track expenses in budget section
-- View recommendations based on favorites
-- Monitor spending categories
+##  Usage
+- Add restaurants using "+" button
+- Track expenses in Budget section
+- View analytics and charts
+- Use search/filter in food list
+- Toggle dark mode from home screen
 
 ##  Database Schema
-Tables:
-- restaurants(id, name, cuisine, price_range, is_favorite)
-- expenses(id, title, amount, category, date)
+
+### Restaurants
+- id
+- name
+- cuisine
+- price_range
+- is_favorite
+
+### Expenses
+- id
+- title
+- amount
+- category
+- date
+
+### Reviews
+- id
+- restaurant_id
+- rating
+- comment
 
 ##  Known Issues
-- No cloud sync (offline only)
-- Basic UI styling
+- Biometric may not work on unsupported emulator
+- Charts require existing expense data
 
 ##  Future Improvements
-- Search/filter
+- Export data (CSV/JSON)
 - Notifications
-- Better AI recommendations
-- Dark mode
+- Image upload for food spots
 
 ##  License
-MIT
+MIT License
