@@ -9,14 +9,12 @@ class AuthService {
 
       if (!canCheck) return false;
 
-      bool didAuthenticate = await auth.authenticate(
-        localizedReason: 'Scan your fingerprint to access the app',
+      return await auth.authenticate(
+        localizedReason: 'Authenticate to access the app',
         options: const AuthenticationOptions(
           biometricOnly: true,
         ),
       );
-
-      return didAuthenticate;
     } catch (e) {
       return false;
     }

@@ -11,49 +11,31 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
 
   @override
-void initState() {
-  super.initState();
-  _authenticateUser();
-}
+  void initState() {
+    super.initState();
+    _startApp();
+  }
 
-Future<void> _authenticateUser() async {
-  final auth = AuthService();
+  Future<void> _startApp() async {
 
-  bool success = await auth.authenticate();
+    await Future.delayed(const Duration(seconds: 1));
 
-  if (success) {
-    Navigator.pushReplacementNamed(context, '/home');
-  } else {
-    // fallback
+    final auth = AuthService();
+    bool success = await auth.authenticate();
+
+    if (!mounted) return;
+
     Navigator.pushReplacementNamed(context, '/home');
   }
-}
 
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      backgroundColor: Colors.green,
-
+    return const Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-
-          children: const [
-
-            Icon(Icons.restaurant, size: 80, color: Colors.white),
-
-            SizedBox(height: 20),
-
-            Text(
-              "Campus Food Finder",
-              style: TextStyle(
-                fontSize: 22,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            )
-          ],
+        child: Text(
+          "Campus Food App",
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
       ),
     );
